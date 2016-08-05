@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 List<WeatherResponse.Weather> weathers = weatherResponse.getWeather();
                 Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
                 WeatherResponse.Main ma= weatherResponse.getMain();
-                Log.e("Temparature : "," "+ ma.getTemp());
+                Log.e("Temparature : "," "+ (int)(ma.getTemp()-273.15));
 
             }
 
