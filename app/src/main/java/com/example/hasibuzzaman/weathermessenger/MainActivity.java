@@ -1,9 +1,10 @@
 package com.example.hasibuzzaman.weathermessenger;
 
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -11,8 +12,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,11 +24,29 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
+    //
+
     WeatherServiceApi weatherServiceApi;
+
+    WeatherResponse weatherResponse ;  //Contains the Whole object that comes from the API
+    List<WeatherResponse.Weather> weathers;  // Arraylist for Weater class object
+    WeatherResponse.Main mainClass  ;  // class Main
+    WeatherResponse.Wind windClass  ;  // class Main
+    WeatherResponse.Sys SunsetSunriseCountry  ;  // class Main
+
+    int temparature ;
+    Integer humidity;
+    Double pressure, tempMax, tempMin,windSpeed;
+    Integer sunset,sunrise;
+    String country=null;
+    //
+
+
     private AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> list;
     ImageView weatherIcon,minTempIcon,maxTempIcon;
     TextView temperatureText,minTempText,maxTempText;
+    String selectedCity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,23 +75,66 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,R.layout.support_simple_spinner_dropdown_item,list);
         autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedCity=autoCompleteTextView.getText().toString();
+                temperatureText.setText(selectedCity);
+                loadDatas();
+            }
+        });
 
 
 
     }
 
     private void loadDatas() {
-        Call<WeatherResponse> weatherResponseCall=weatherServiceApi.getWeather();
+        String sy= "data/2.5/weather?q="+selectedCity+"&appid=e72eab0d4bf4ebaa03b4ed3f02680aa4";
+        Call<WeatherResponse> weatherResponseCall=weatherServiceApi.getWeather(sy);
 
         weatherResponseCall.enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
-                WeatherResponse weatherResponse = response.body();
-                List<WeatherResponse.Weather> weathers = weatherResponse.getWeather();
-                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get
-                        (0).getDescription() );
-                WeatherResponse.Main ma= weatherResponse.getMain();
-                Log.e("Temparature : "," "+ (int)(ma.getTemp()-273.15));
+
+                //  All References
+                weatherResponse = response.body();  // getting the Whole object from the API
+                weathers = weatherResponse.getWeather();  // Arraylist of Weather class object
+                // some test printing
+                mainClass= weatherResponse.getMain();  // acheiving the Main class
+                temparature = (int)(mainClass.getTemp()-273.15);  // Acheving the temparature in Celcious
+                String Cityname = weatherResponse.getName();
+                windClass = weatherResponse.getWind();  // getting the wind class reference
+                windSpeed = windClass.getSpeed();
+                pressure=  mainClass.getPressure();
+                humidity = mainClass.getHumidity();
+                tempMax = mainClass.getTempMax();
+                tempMin = mainClass.getTempMin();
+                SunsetSunriseCountry = weatherResponse.getSys();
+                sunrise = SunsetSunriseCountry.getSunrise();
+                 sunset = SunsetSunriseCountry.getSunset();
+
+                long timestamp = (Long.parseLong(String.valueOf(sunset)) * 1000);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a",Locale.getDefault());
+               // SimpleDateFormat sdf = new SimpleDateFormat("E, hh:mm:ss");
+              // sdf.setTimeZone(TimeZone.getTimeZone(""));
+                String date = sdf.format(timestamp);
+                Log.e("Sunrise : ", ""+date);
+
+
+
+
+
+
+
+                //
+
+
+
+                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
+                Log.e("Temparature : "," "+ temparature);
+                Log.e("CitynAME : "," "+ Cityname);
+
                 initilizereference();
                 minTempIcon.setImageResource(R.drawable.downward);
                 maxTempIcon.setImageResource(R.drawable.upward);
