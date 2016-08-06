@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 sunrise = SunsetSunriseCountry.getSunrise();
                  sunset = SunsetSunriseCountry.getSunset();
 
+
+
                 long timestamp = (Long.parseLong(String.valueOf(sunset)) * 1000);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a",Locale.getDefault());
@@ -170,9 +172,11 @@ public class MainActivity extends AppCompatActivity {
         minTempIcon= (ImageView) findViewById(R.id.minTempIcon);
         maxTempText= (TextView) findViewById(R.id.maxTempText);
         minTempText= (TextView) findViewById(R.id.minTempText);
+
+
+        windInfo= (TextView) findViewById(R.id.windInfo);
         windDetails= (TextView) findViewById(R.id.windDetails);
         humidityInfo= (TextView) findViewById(R.id.humidityInfo);
-        windInfo= (TextView) findViewById(R.id.windInfo);
         humidityDetails= (TextView) findViewById(R.id.humidityDetails);
         visibilityDetails= (TextView) findViewById(R.id.visibilityDetails);
         visibilityInfo= (TextView) findViewById(R.id.visibilityInfo);
