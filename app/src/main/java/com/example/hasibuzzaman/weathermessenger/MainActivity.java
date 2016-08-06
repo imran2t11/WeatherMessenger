@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,19 +19,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity {
-    WeatherResponse weatherResponse ;  //Contains the Whole object that comes from the API
-    List<WeatherResponse.Weather> weathers;  // Arraylist for Weater class object
-    WeatherResponse.Main mainClass  ;  // class Main
-    int temparature ;
-
-
     WeatherServiceApi weatherServiceApi;
     private AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> list;
-    ImageView weatherIcon;
-    TextView temperatureText;
+    ImageView weatherIcon,minTempIcon,maxTempIcon;
+    TextView temperatureText,minTempText,maxTempText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,38 +64,39 @@ public class MainActivity extends AppCompatActivity {
         weatherResponseCall.enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
-                weatherResponse = response.body();  // getting the Whole object from the API
-                 weathers = weatherResponse.getWeather();  // Arraylist of Weather class object
-                // some test printing
-                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
-                mainClass= weatherResponse.getMain();  // acheiving the Main class
-                temparature = (int)(mainClass.getTemp()-273.15);  // Acheving the temparature in Celcious
-                Log.e("Temparature : "," "+ temparature);
-
-                weatherIcon=(ImageView) findViewById(R.id.weatherIcon);  // icon imageview reference
-                temperatureText= (TextView) findViewById(R.id.temperatureText);
-                Log.e("mine", "onResponse: "+weathers.get(0).getIcon() );
+                WeatherResponse weatherResponse = response.body();
+                List<WeatherResponse.Weather> weathers = weatherResponse.getWeather();
+                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get
+                        (0).getDescription() );
+                WeatherResponse.Main ma= weatherResponse.getMain();
+                Log.e("Temparature : "," "+ (int)(ma.getTemp()-273.15));
+                initilizereference();
+                minTempIcon.setImageResource(R.drawable.downward);
+                maxTempIcon.setImageResource(R.drawable.upward);
+                minTempText.setText("70°");
+                maxTempText.setText("90°");
 
                 String iconString=weathers.get(0).getIcon().toString();
-                // shwoing the icon
                 String url="http://openweathermap.org/img/w/" + iconString + ".png";
                 Picasso.with(MainActivity.this)
                         .load(url)
                         .into(weatherIcon);
-
-
-                // getting Refernce of All necessary classes Datas
-
-
-
-
             }
 
             @Override
             public void onFailure(Call<WeatherResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Data can't retreive", Toast.LENGTH_SHORT).show();
+
             }
         });
+    }
+
+    private void initilizereference() {
+        weatherIcon=(ImageView) findViewById(R.id.weatherIcon);
+        temperatureText= (TextView) findViewById(R.id.temperatureText);
+        maxTempIcon= (ImageView) findViewById(R.id.maxTempIcon);
+        minTempIcon= (ImageView) findViewById(R.id.minTempIcon);
+        maxTempText= (TextView) findViewById(R.id.maxTempText);
+        minTempText= (TextView) findViewById(R.id.minTempText);
     }
 
     private void networkLibraryPopulate() {
