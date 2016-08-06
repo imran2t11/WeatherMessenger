@@ -26,6 +26,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     //
 
+
+    ImageView windIcon,humidityIcon,visibilityIcon,pressureIcon,uvIcon,sunIcon;
+    TextView windDetails,windInfo,humidityInfo,humidityDetails,visibilityDetails,visibilityInfo,pressureInfo,pressureDetails;
+    TextView sunInfo,sunDetails,uvInfo,uvDetails;
     WeatherServiceApi weatherServiceApi;
 
     WeatherResponse weatherResponse ;  //Contains the Whole object that comes from the API
@@ -127,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
+
                 //
 
 
@@ -162,6 +170,33 @@ public class MainActivity extends AppCompatActivity {
         minTempIcon= (ImageView) findViewById(R.id.minTempIcon);
         maxTempText= (TextView) findViewById(R.id.maxTempText);
         minTempText= (TextView) findViewById(R.id.minTempText);
+        windDetails= (TextView) findViewById(R.id.windDetails);
+        humidityInfo= (TextView) findViewById(R.id.humidityInfo);
+        windInfo= (TextView) findViewById(R.id.windInfo);
+        humidityDetails= (TextView) findViewById(R.id.humidityDetails);
+        visibilityDetails= (TextView) findViewById(R.id.visibilityDetails);
+        visibilityInfo= (TextView) findViewById(R.id.visibilityInfo);
+        pressureInfo= (TextView) findViewById(R.id.pressureInfo);
+        pressureDetails= (TextView) findViewById(R.id.pressureDetails);
+        sunInfo= (TextView) findViewById(R.id.sunInfo);
+        sunDetails= (TextView) findViewById(R.id.sunDetails);
+        uvInfo= (TextView) findViewById(R.id.uvInfo);
+        uvDetails= (TextView) findViewById(R.id.uvDetails);
+
+        windIcon= (ImageView) findViewById(R.id.windIcon);
+        humidityIcon= (ImageView) findViewById(R.id.humidityIcon);
+        visibilityIcon= (ImageView) findViewById(R.id.visibilityIcon);
+        pressureIcon= (ImageView) findViewById(R.id.pressureIcon);
+        uvIcon= (ImageView) findViewById(R.id.uvIcon);
+        sunIcon= (ImageView) findViewById(R.id.sunIcon);
+
+
+
+
+
+
+
+
     }
 
     private void networkLibraryPopulate() {
