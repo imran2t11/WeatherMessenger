@@ -1,10 +1,15 @@
 package com.example.hasibuzzaman.weathermessenger;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     WeatherServiceApi weatherServiceApi;
     private AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> list;
+    ImageView weatherIcon;
+    TextView temperatureText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         list.add("Gazipur");list.add("Gopalganj");list.add("Jamalpur ");list.add("Kishoreganj");list.add("Madaripur");
         list.add("Manikganj");list.add("Munshiganj");list.add("Mymensingh");list.add("Narayanganj");list.add("Narsingdi");
         list.add("Netrakona");list.add("Rajbari");list.add("Shariatpur");list.add("Sherpur");list.add("Tangail");
-        list.add(" Bagerhat");list.add("Chuadanga");list.add("Jessore");list.add("Jhenaidah");list.add("Khulna");
+        list.add("Bagerhat");list.add("Chuadanga");list.add("Jessore");list.add("Jhenaidah");list.add("Khulna");
         list.add("Kushtia");list.add("Magura");list.add("Meherpur");list.add("Narail");list.add("Satkhira");
         list.add("Bogra");list.add("Joypurhat");list.add("Naogaon");list.add("Natore");
         list.add("Nawabganj");list.add("Pabna");list.add("Rajshahi");list.add("Sirajganj");
@@ -63,7 +70,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
                 WeatherResponse.Main ma= weatherResponse.getMain();
                 Log.e("Temparature : "," "+ (int)(ma.getTemp()-273.15));
-
+                weatherIcon=(ImageView) findViewById(R.id.weatherIcon);
+                temperatureText= (TextView) findViewById(R.id.temperatureText);
+                Log.e("mine", "onResponse: "+weathers.get(0).getIcon() );
+                String iconString=weathers.get(0).getIcon().toString();
+                String url="http://openweathermap.org/img/w/" + iconString + ".png";
+                Picasso.with(MainActivity.this)
+                        .load(url)
+                        .into(weatherIcon);
             }
 
             @Override
