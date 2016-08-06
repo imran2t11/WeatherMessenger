@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         list.add("Nawabganj");list.add("Pabna");list.add("Rajshahi");list.add("Sirajganj");
         list.add("Dinajpur");list.add("Gaibandha");list.add("Kurigram");list.add("Lalmonirhat");
         list.add("Nilphamari");list.add("Panchagarh");list.add("Rangpur");list.add("Thakurgaon");
-        list.add("Habiganj");list.add("NANABARI");list.add("Sunamganj");list.add("Sylhet");
+        list.add("Habiganj");list.add("Moulvibazar");list.add("Sunamganj");list.add("Sylhet");
 
 
         ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,R.layout.support_simple_spinner_dropdown_item,list);
