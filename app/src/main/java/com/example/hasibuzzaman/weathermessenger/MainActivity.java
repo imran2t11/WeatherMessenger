@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -21,8 +23,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     WeatherServiceApi weatherServiceApi;
+    WeatherResponse weatherResponse ;  //Contains the Whole object that comes from the API
+    List<WeatherResponse.Weather> weathers;  // Arraylist for Weater class object
+    WeatherResponse.Main mainClass  ;  // class Main
+    int temparature ;
+
+
     private AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> list;
+    static String selectedCity;
     ImageView weatherIcon,minTempIcon,maxTempIcon;
     TextView temperatureText,minTempText,maxTempText;
     @Override
@@ -54,6 +63,16 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,R.layout.support_simple_spinner_dropdown_item,list);
         autoCompleteTextView.setAdapter(adapter);
 
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedCity=autoCompleteTextView.getText().toString();
+                temperatureText.setText(selectedCity);
+
+            }
+        });
+
+
 
 
     }
@@ -64,12 +83,13 @@ public class MainActivity extends AppCompatActivity {
         weatherResponseCall.enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
-                WeatherResponse weatherResponse = response.body();
-                List<WeatherResponse.Weather> weathers = weatherResponse.getWeather();
-                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get
-                        (0).getDescription() );
-                WeatherResponse.Main ma= weatherResponse.getMain();
-                Log.e("Temparature : "," "+ (int)(ma.getTemp()-273.15));
+                weatherResponse = response.body();  // getting the Whole object from the API
+                weathers = weatherResponse.getWeather();  // Arraylist of Weather class object
+                // some test printing
+                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
+                mainClass= weatherResponse.getMain();  // acheiving the Main class
+                temparature = (int)(mainClass.getTemp()-273.15);  // Acheving the temparature in Celcious
+                Log.e("Temparature : "," "+ temparature);
                 initilizereference();
                 minTempIcon.setImageResource(R.drawable.downward);
                 maxTempIcon.setImageResource(R.drawable.upward);
