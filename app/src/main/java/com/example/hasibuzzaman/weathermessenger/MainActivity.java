@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import retrofit2.Call;
@@ -113,14 +112,15 @@ public class MainActivity extends AppCompatActivity {
                 sunrise = SunsetSunriseCountry.getSunrise();
                  sunset = SunsetSunriseCountry.getSunset();
 
-                long timestamp = (Long.parseLong(String.valueOf(sunset)) * 1000);
+                long timestamp = Long.parseLong(String.valueOf(sunset)) * 1000L ;
 
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a",Locale.getDefault());
-               // SimpleDateFormat sdf = new SimpleDateFormat("E, hh:mm:ss");
-              // sdf.setTimeZone(TimeZone.getTimeZone(""));
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+               // SimpleDateFormat sdf = new SimpleDateFormat("E, hh:mm");
+                sdf.setTimeZone(TimeZone.getTimeZone("Asia/Dhaka"));
                 String date = sdf.format(timestamp);
-                Log.e("Sunrise : ", ""+date);
-
+                Log.e("WindSpeed : ", ""+windSpeed);
+                Log.e("humidity : ", ""+humidity+"%");
+                Log.e("pressure : ", ""+pressure+" kpa");
 
 
 
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
+               // Log.e("PD DEbug", weathers.get(0).getId()+" , "+ weathers.get(0).getMain() + ", "+ weathers.get(0).getDescription() );
                 Log.e("Temparature : "," "+ temparature);
                 Log.e("CitynAME : "," "+ Cityname);
 
