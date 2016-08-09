@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Integer humidity;
     Double pressure,windSpeed,lat,lon;
     int tempMax, tempMin;
-    Integer sunset,sunrise, lastUpdateTime,cloudPercentage;
+    Integer sunset,sunrise,cloudPercentage;
+    Integer lastUpdateTime;
     String country=null;
      Myclass myclass;
     //
@@ -116,78 +117,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         autoCompleteTextView.setAdapter(adapter);
         autoCompleteTextView.setOnItemClickListener(this);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        final Handler handler =new Handler(getMainLooper());
-        new Thread()
-        {
-            @Override
-            public void run() {
-                while(true)
-                {
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Log.e("Inside Time: ", "Time update");
-                            long timestamp = (Long.parseLong(String.valueOf(lastUpdateTime)) * 1000);
-                            SimpleDateFormat time_formatter = new SimpleDateFormat("HH:mm:ss");
-                            time_formatter.setTimeZone(TimeZone.getTimeZone("GMT+06"));
-                            String last_update_time_str = time_formatter.format(timestamp);
-                            String current_time_str = time_formatter.format(System.currentTimeMillis());
-
-                            Log.e("lastUpdate : ", ""+last_update_time_str);
-
-                            SimpleDateFormat format = new SimpleDateFormat("hh:mm");
-                            Date date1 = null;
-                            Date date2= null;
-                            try {
-                                date1 = format.parse(last_update_time_str);
-                                date2= format.parse(current_time_str);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            long diff = date2.getTime() - date1.getTime();
-
-                           // long diffSeconds = diff / 1000 % 60;
-                            long diffMinutes = diff / (60 * 1000) % 60;
-                           // long diffHours = diff / (60 * 60 * 1000) % 24;
-                           // long diffDays = diff / (24 * 60 * 60 * 1000);
-
-                         /*  *//**//* Log.e("dayes : " , diffDays+"" );
-                            //System.out.print(diffHours + " hours, ");
-                            Log.e("minutes : ",diffMinutes +"");
-                            Log.e(" seconds :", diffSeconds + "");*//**//*
-                            // if()*/
-
-
-                            if(diffMinutes>1)
-                            {
-
-                                lastUpdateText.setText(""+ diffMinutes+" min ago");
-                            }
-                            else
-                            {
-                                lastUpdateText.setText(" "+ diffMinutes+" min ago");
-
-                            }
-                        }
-                    });
-
-                    try {
-                        sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }.start();
 
 
         myclass=new Myclass();
@@ -286,6 +216,81 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                /* Picasso.with(MainActivity.this)
                         .load(url)
                         .into(weatherIcon);*/
+
+
+
+                final Handler handler =new Handler(getMainLooper());
+                new Thread()
+                {
+                    @Override
+                    public void run() {
+                        while(true)
+                        {
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    Log.e("Inside Time: ", "Time update");
+
+
+
+                                    long timestamp = (Long.parseLong(String.valueOf(lastUpdateTime)) * 1000);
+                                    SimpleDateFormat time_formatter = new SimpleDateFormat("HH:mm:ss");
+                                    time_formatter.setTimeZone(TimeZone.getTimeZone("GMT+06"));
+                                    String last_update_time_str = time_formatter.format(timestamp);
+                                    String current_time_str = time_formatter.format(System.currentTimeMillis());
+
+                                    Log.e("lastUpdate : ", ""+last_update_time_str);
+
+                                    SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+                                    Date date1 = null;
+                                    Date date2= null;
+                                    try {
+                                        date1 = format.parse(last_update_time_str);
+                                        date2= format.parse(current_time_str);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                    long diff = date2.getTime() - date1.getTime();
+
+                                    // long diffSeconds = diff / 1000 % 60;
+                                    long diffMinutes = diff / (60 * 1000) % 60;
+                                    // long diffHours = diff / (60 * 60 * 1000) % 24;
+                                    // long diffDays = diff / (24 * 60 * 60 * 1000);
+
+                         /*  *//**//* Log.e("dayes : " , diffDays+"" );
+                            //System.out.print(diffHours + " hours, ");
+                            Log.e("minutes : ",diffMinutes +"");
+                            Log.e(" seconds :", diffSeconds + "");*//**//*
+                            // if()*/
+
+
+                                    if(diffMinutes>1)
+                                    {
+
+                                        lastUpdateText.setText(""+ diffMinutes+" min ago");
+                                    }
+                                    else
+                                    {
+                                        lastUpdateText.setText(" "+ diffMinutes+" min ago");
+
+                                    }
+                                }
+                            });
+
+                            try {
+                                sleep(10);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                }.start();
+
             }
 
             @Override
